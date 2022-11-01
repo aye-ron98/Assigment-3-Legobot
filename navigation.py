@@ -1,34 +1,44 @@
 from mindstorms import MSHub, MotorPair, ColorSensor
 
-motor_pair = MotorPair('B', 'A')
-color_sensor = ColorSensor('C')
-
 
 def course_correction():
     """
-    PID module.
+    Calculate course correction scalar.
 
-    Calculate the light intensity and the rate of change.
+    Function to examine the difference between centerline black and current position. Will return an integer to be used
+    to scale motor speed.
     :return: an integer
     """
-    global color_sensor
-    porportinal_error = 9 - color_sensor.get_reflected_light()  # arbitrary placeholder
-    integral_error = porportinal_error - color_sensor.get_reflected_light()
-    derived_error = porportinal_error - color_sensor.get_reflected_light()
-
-    return 5 * porportinal_error + 5 * integral_error + 5 * derived_error
+    color_sensor = ColorSensor('C')
+    porportinal_error = 65 - color_sensor.get_reflected_light()  # arbitrary placeholder
+    return 0.5 * porportinal_error
 
 
-while True:
-    intensity = color_sensor.get_reflected_light()
-    if intensity < 65:
-        motor_pair.start(-10, -8)
-        print('black')
+def drive(speed):
+    """
+    Drives robot.
 
-    elif 72 < intensity < 90:
-        motor_pair.start(0, -5)
-        print('white')
+    A function to drive the robot on the black line
+    :param speed: integer between [1, 100]
+    :precondition: speed must be an integer between [1, 100]
+    :postconidion: wheel motors will move at rotation rate equivalent to speed
+    """
+    while True:
+        motor_pair = MotorPair('B', 'A')
+        intensity = ColorSensor('C').get_reflected_light()
 
-    elif intensity > 90:
-        motor_pair.stop()
-        print('end')
+        if intensity < 54:
+            motor_pair.start(speed - course_correction(), speed + course_correction())
+            print('correct right')
+        elif 55 < intensity < 65:
+            motor_pair.start(speed, speed)
+            print('straight')
+        elif intensity > 66:
+            motor_pair.start(speed + course_correction(), speed - course_correction())
+            print('correct left')
+        elif intensity > 90:
+            motor_pair.stop()
+            print('end')
+
+
+drive(30)
