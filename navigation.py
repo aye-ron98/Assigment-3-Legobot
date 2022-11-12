@@ -8,29 +8,43 @@ motor_pair = MotorPair('A', 'B')
 color_sensor = ColorSensor('C')
 
 
-def drive(speed, target_value, multiplier):
+def scale(light, tape, floor, steer_max):
+    """
+    Normalize scale factor between desired maximum and minimum turning values.
+    ***This should ensure robot does not have preference to right turns***
+
+    :param light: amount from light sensor
+    :param tape: amount of reflection from middle of tape
+    :param floor: amount of reflected light from floor (out of bound)
+    :param steer_max: max turn amount (bind robot to these turns)
+    :return: scale factor to correct steering
+    """
+    return (
+        int(-steer_max + (((light - tape) * (steer_max - (-steer_max))) / (floor - tape)))
+    )
+
+
+def drive(tape, floor, steer_max):
     """
     Drives robot.
     A function to drive the robot on the black line
 
-    :param speed: integer between [1, 100]
-    :param target_value: integer value [0, 100]
-    :param multiplier: integer value, this value will control steering,
-    :precondition: recommend set speed to 25
-    :precondition: set target_value to edge between black tape and off course
-    :precondition: recommend set multiplier to 8, lower will decrease steering higher increases
-    :precondition: align robot to right edge of tape
+    :param target_value: reflection between tape and black line
+    :param tape: reflection from middle of line (lower bound)
+    :param floor: reflection from floor (upper bound)
     :postcondition: robot will follow the black line
     """
 
     while True:
         intensity = color_sensor.get_reflected_light()
-        steer = intensity - target_value * multiplier
+        steer = scale(intensity, tape, floor, steer_max)
+        if intensity <= 17:
+            motor_pair.start_tank_at_power(-60, 40)
 
-        motor_pair.set_default_speed(speed)
-        motor_pair.start(steer)
+        else:
+            motor_pair.start_at_power(30, steer)
 
-        print(steer)
+        print('light sensor: {0}, turn value {1}'.format(intensity, steer))
 
 
-drive(15, 25, 8)
+drive(16, 46, 90)
