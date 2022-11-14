@@ -19,10 +19,13 @@ def turn_randomly():
     """
     Turns the robot in a random angle selected from the range of integers [110,180]
 
+    :postcondition: the robot is facing a direction that is a random angle from its original direction
     """
     hub.motion_sensor.reset_yaw_angle()
+    current_angle = hub.motion_sensor.get_yaw_angle()
     random_angle = random.randint(110,180)
-    while hub.motion_sensor.get_yaw_angle() < random_angle:
+    while current_angle < random_angle:
+        current_angle = hub.motion_sensor.get_yaw_angle()
         motor_pair.start(100)
     motor_pair.stop()
 
@@ -31,6 +34,7 @@ def fight():
     """
     Robot engages in offensive sumo maneuvers.
 
+    :postcondition: the robot is fighting
     """
     motor_pair.set_default_speed(10)
 
@@ -42,7 +46,7 @@ def fight():
             turn_randomly()
         if dist_cm is None:
             continue
-        if dist_cm >= 15:
+        elif dist_cm >= 15:
             motor_pair.set_default_speed(20)
         elif dist_cm < 14:
             motor_pair.set_default_speed(30)
