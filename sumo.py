@@ -14,24 +14,38 @@ color_sensor = ColorSensor('C')
 # Initialize the Distance Sensor.
 distance_sensor = DistanceSensor('D')
 
-motor_pair.set_default_speed(10)
 
 def turn_randomly():
+    """
+    Turns the robot in a random angle selected from the range of integers [110,180]
+
+    """
     hub.motion_sensor.reset_yaw_angle()
     random_angle = random.randint(110,180)
     while hub.motion_sensor.get_yaw_angle() < random_angle:
         motor_pair.start(100)
     motor_pair.stop()
 
-while True:
-    motor_pair.start(0)
-    dist_cm = distance_sensor.get_distance_cm()
-    print(dist_cm)
-    if color_sensor.get_color() == 'black':
-        turn_randomly()
-    if dist_cm is None:
-        continue
-    if dist_cm >= 15:
-        motor_pair.set_default_speed(20)
-    elif dist_cm < 14:
-        motor_pair.set_default_speed(30)
+
+def fight():
+    """
+    Robot engages in offensive sumo maneuvers.
+
+    """
+    motor_pair.set_default_speed(10)
+
+    while True:
+        motor_pair.start(0)
+        dist_cm = distance_sensor.get_distance_cm()
+        print(dist_cm)
+        if color_sensor.get_color() == 'black':
+            turn_randomly()
+        if dist_cm is None:
+            continue
+        if dist_cm >= 15:
+            motor_pair.set_default_speed(20)
+        elif dist_cm < 14:
+            motor_pair.set_default_speed(30)
+
+
+fight()
