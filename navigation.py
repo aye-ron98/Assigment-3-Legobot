@@ -39,10 +39,10 @@ def drive(tape, floor, steer_max):
         intensity = color_sensor.get_reflected_light()
         steer = scale(intensity, tape, floor, steer_max, steer_range, light_range)
         if intensity <= (tape + 1):
-            motor_pair.start_tank_at_power(-30, 40)
+            motor_pair.start_at_power(-35, (-1 * int(steer * 1.5)))
 
         else:
-            motor_pair.start_at_power(35, steer) # first value is speed
+            motor_pair.start_at_power(35, steer)
 
         print('light sensor: {0}, turn value {1}'.format(intensity, steer))
 
