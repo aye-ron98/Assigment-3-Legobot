@@ -1,8 +1,8 @@
 from mindstorms import MSHub, Motor, MotorPair, ColorSensor, DistanceSensor, App
 from mindstorms.control import wait_for_seconds, wait_until, Timer
-from mindstorms.operator import greater_than, greater_than_or_equal_to, less_than, less_than_or_equal_to, equal_to, not_equal_to
+from mindstorms.operator import greater_than, greater_than_or_equal_to, less_than, less_than_or_equal_to, equal_to, \
+    not_equal_to
 import random
-
 
 # Initialize the hub.
 hub = MSHub()
@@ -12,6 +12,8 @@ motor_pair = MotorPair('A', 'B')
 color_sensor = ColorSensor('C')
 # Initialize the Distance Sensor.
 distance_sensor = DistanceSensor('D')
+# Initialize the Weapon at Port E.
+weapon = Motor('E')
 
 
 def turn_randomly():
@@ -29,6 +31,27 @@ def turn_randomly():
     motor_pair.stop()
 
 
+def run_weapon():
+    """
+    Controls the weapon connected to a motor at a port.
+
+    :postcondition: weapon connected to motor at the port is moving
+    """
+    count = 1
+    while count < 2:
+        color = color_sensor.get_color()
+        print(color)
+        if color == 'black' or color is None:
+            motor_pair.stop()
+            weapon.run_to_position(176, 'clockwise', 75)
+            break
+        else:
+            weapon.run_to_position(90, 'counterclockwise', 75)
+            weapon.run_to_position(176, 'clockwise', 75)
+
+        count += 1
+
+
 def fight(speed, tape_intensity):
     """
     Robot engages in offensive sumo maneuvers.
@@ -44,7 +67,9 @@ def fight(speed, tape_intensity):
     while True:
         motor_pair.start(0)
         dist_cm = distance_sensor.get_distance_cm()
-        if color_sensor.get_reflected_light() <= tape_intensity:
+        color = color_sensor.get_color()
+        print(color)
+        if color == 'black' or color is None:
             motor_pair.stop()
             turn_randomly()
         if dist_cm is None:
@@ -52,7 +77,8 @@ def fight(speed, tape_intensity):
         elif dist_cm >= 15:
             motor_pair.set_default_speed(speed * 2)
         elif dist_cm < 15:
+            run_weapon()
             motor_pair.set_default_speed(speed * 3)
 
 
-fight(20, 19)
+fight(10, 19)
