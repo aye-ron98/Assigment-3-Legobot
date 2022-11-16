@@ -8,14 +8,15 @@ motor_pair = MotorPair('A', 'B')
 color_sensor = ColorSensor('C')
 
 
-def scale(light, tape, floor, steer_max, steer_range, light_range):
+def scale(light, tape, steer_max, steer_range, light_range):
     """
     Normalize scale factor between desired maximum and minimum turning values.
     ***This should ensure robot does not have preference to right turns***
 
     :param light: amount from light sensor
     :param tape: amount of reflection from middle of tape
-    :param floor: amount of reflected light from floor (out of bound)
+    :param steer_range: values between [steer_max, -100]
+    :param light_range: vales between [tape, floor]
     :param steer_max: max turn amount (bind robot to these turns)
     :return: scale factor to correct steering
     """
@@ -27,9 +28,10 @@ def drive(tape, floor, steer_max):
     Drives robot.
     A function to drive the robot on the black line
 
-    :param target_value: reflection between tape and black line
+
     :param tape: reflection from middle of line (lower bound)
     :param floor: reflection from floor (upper bound)
+    :param steer_max: max steer value
     :postcondition: robot will follow the black line
     """
     steer_range = steer_max - (-95)
@@ -38,8 +40,8 @@ def drive(tape, floor, steer_max):
     while True:
         intensity = color_sensor.get_reflected_light()
         steer = scale(intensity, tape, floor, steer_max, steer_range, light_range)
-        if intensity <= (tape - 1):
-            motor_pair.start_at_power(-35, (-1 * int(steer * 1.5)))
+        if intensity <= (tape - 4):
+            motor_pair.start_at_power(-38, (-1 * int(steer * 1.5)))
 
         else:
             motor_pair.start_at_power(40, steer)
@@ -47,4 +49,5 @@ def drive(tape, floor, steer_max):
         print('light sensor: {0}, turn value {1}'.format(intensity, steer))
 
 
-drive(21, 75, 75)
+drive(21, 75, 68)
+
