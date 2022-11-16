@@ -1,7 +1,6 @@
 from mindstorms import MSHub, Motor, MotorPair, ColorSensor, DistanceSensor, App
 from mindstorms.control import wait_for_seconds, wait_until, Timer
 from mindstorms.operator import greater_than, greater_than_or_equal_to, less_than, less_than_or_equal_to, equal_to, not_equal_to
-import math
 import random
 
 
@@ -23,33 +22,37 @@ def turn_randomly():
     """
     hub.motion_sensor.reset_yaw_angle()
     current_angle = hub.motion_sensor.get_yaw_angle()
-    random_angle = random.randint(110,180)
+    random_angle = random.randint(150, 180)
     while current_angle < random_angle:
         current_angle = hub.motion_sensor.get_yaw_angle()
         motor_pair.start(100)
     motor_pair.stop()
 
 
-def fight():
+def fight(speed, tape_intensity):
     """
     Robot engages in offensive sumo maneuvers.
 
+    :param speed: an integer
+    :param tape_intensity: an integer
+    :precondition: speed must be an integer
+    :precondition: tape_intensity must be an integer
     :postcondition: the robot is fighting
     """
-    motor_pair.set_default_speed(10)
+    motor_pair.set_default_speed(speed)
 
     while True:
         motor_pair.start(0)
         dist_cm = distance_sensor.get_distance_cm()
-        print(dist_cm)
-        if color_sensor.get_color() == 'black':
+        if color_sensor.get_reflected_light() <= tape_intensity:
+            motor_pair.stop()
             turn_randomly()
         if dist_cm is None:
             continue
         elif dist_cm >= 15:
-            motor_pair.set_default_speed(20)
-        elif dist_cm < 14:
-            motor_pair.set_default_speed(30)
+            motor_pair.set_default_speed(speed * 2)
+        elif dist_cm < 15:
+            motor_pair.set_default_speed(speed * 3)
 
 
-fight()
+fight(20, 19)
