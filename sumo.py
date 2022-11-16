@@ -42,11 +42,11 @@ def run_weapon():
         color = color_sensor.get_color()
         if color == 'black' or color is None:
             motor_pair.stop()
-            weapon.run_to_position(176, 'clockwise', 75)
+            weapon.run_to_position(300, 'clockwise', 75)
             break
         else:
-            weapon.run_to_position(90, 'counterclockwise', 75)
-            weapon.run_to_position(176, 'clockwise', 75)
+            weapon.run_to_position(176, 'counterclockwise', 75)
+            weapon.run_to_position(300, 'clockwise', 75)
         count += 1
 
 
@@ -69,12 +69,13 @@ def fight(speed):
             motor_pair.stop()
             turn_randomly()
         if dist_cm is None:
+            motor_pair.set_default_speed(speed)
             continue
-        elif dist_cm >= 15:
+        elif dist_cm >= 20:
             motor_pair.set_default_speed(speed * 2)
-        elif dist_cm < 15:
+        elif dist_cm < 5:
             run_weapon()
-            motor_pair.set_default_speed(speed * 3)
+            motor_pair.set_default_speed(speed * 5)
 
 
-fight(10)
+fight(20)
