@@ -8,30 +8,34 @@ motor_pair = MotorPair('A', 'B')
 color_sensor = ColorSensor('C')
 
 
-def scale(light, tape, steer_max, steer_range, light_range):
+def scale(light, tape, steer_range, light_range):
     """
-    Normalize scale factor between desired maximum and minimum turning values.
-    ***This should ensure robot does not have preference to right turns***
+    Normalize light values between steer range to ensure robot does not have preference to right turns.
 
-    :param light: amount from light sensor
-    :param tape: amount of reflection from middle of tape
-    :param steer_range: values between [steer_max, -100]
-    :param light_range: vales between [tape, floor]
-    :param steer_max: max turn amount (bind robot to these turns)
-    :return: scale factor to correct steering
+    :param light: an integer that is the amount from light sensor
+    :param tape: an integer that is the amount of reflection from middle of black tape
+    :param steer_range: an integer
+    :param light_range: an integer
+    :precondition: light must be an integer in the range [0,100]
+    :precondition: tape must be an integer in the range [0,100]
+    :precondition: steer_range must be an integer
+    :precondition: light_range must be an integer
+    :postcondition: will calculate steer value as an integer and return it
+    :return: a steer value to correct steering as an integer
     """
-    return int(-95 + (((light - tape) * steer_range)) / light_range)
+    return int(-95 + ((light - tape) * steer_range) / light_range)
 
 
 def drive(tape, floor, steer_max):
     """
-    Drives robot.
-    A function to drive the robot on the black line
+    A function to drive the robot on the black line.
 
-
-    :param tape: reflection from middle of line (lower bound)
-    :param floor: reflection from floor (upper bound)
-    :param steer_max: max steer value
+    :param tape: an integer that is the reflection from middle of line (lower bound)
+    :param floor: an integer that is the reflection from floor (upper bound)
+    :param steer_max: an integer that is the max steer value
+    :precondition: tape is an integer in the range [0,100]
+    :precondition: floor is an integer in the range [0,100] and must be greater than tape parameter
+    :precondition: steer_max is an integer in the range [0,100]
     :postcondition: robot will follow the black line
     """
     steer_range = steer_max - (-95)
@@ -39,10 +43,9 @@ def drive(tape, floor, steer_max):
 
     while True:
         intensity = color_sensor.get_reflected_light()
-        steer = scale(intensity, tape, floor, steer_max, steer_range, light_range)
+        steer = scale(intensity, tape, steer_range, light_range)
         if intensity <= (tape - 4):
             motor_pair.start_at_power(-38, (-1 * int(steer * 1.5)))
-
         else:
             motor_pair.start_at_power(40, steer)
 
@@ -50,4 +53,3 @@ def drive(tape, floor, steer_max):
 
 
 drive(21, 75, 68)
-
