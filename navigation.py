@@ -19,7 +19,7 @@ def scale(light, tape, floor, steer_max, steer_range, light_range):
     :param steer_max: max turn amount (bind robot to these turns)
     :return: scale factor to correct steering
     """
-    return int(-steer_max + (((light - tape) * steer_range)) / light_range)
+    return int(-95 + (((light - tape) * steer_range)) / light_range)
 
 
 def drive(tape, floor, steer_max):
@@ -32,19 +32,19 @@ def drive(tape, floor, steer_max):
     :param floor: reflection from floor (upper bound)
     :postcondition: robot will follow the black line
     """
-    steer_range = steer_max - (-steer_max)
+    steer_range = steer_max - (-95)
     light_range = floor - tape
 
     while True:
         intensity = color_sensor.get_reflected_light()
         steer = scale(intensity, tape, floor, steer_max, steer_range, light_range)
-        if intensity <= (tape + 1):
+        if intensity <= (tape - 1):
             motor_pair.start_at_power(-35, (-1 * int(steer * 1.5)))
 
         else:
-            motor_pair.start_at_power(35, steer)
+            motor_pair.start_at_power(40, steer)
 
         print('light sensor: {0}, turn value {1}'.format(intensity, steer))
 
 
-drive(20, 75, 75)
+drive(21, 75, 75)
