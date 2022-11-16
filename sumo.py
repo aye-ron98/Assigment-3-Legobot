@@ -40,7 +40,6 @@ def run_weapon():
     count = 1
     while count < 2:
         color = color_sensor.get_color()
-        print(color)
         if color == 'black' or color is None:
             motor_pair.stop()
             weapon.run_to_position(176, 'clockwise', 75)
@@ -48,18 +47,15 @@ def run_weapon():
         else:
             weapon.run_to_position(90, 'counterclockwise', 75)
             weapon.run_to_position(176, 'clockwise', 75)
-
         count += 1
 
 
-def fight(speed, tape_intensity):
+def fight(speed):
     """
     Robot engages in offensive sumo maneuvers.
 
     :param speed: an integer
-    :param tape_intensity: an integer
-    :precondition: speed must be an integer
-    :precondition: tape_intensity must be an integer
+    :precondition: speed must be an integer in the range [0, 100]
     :postcondition: the robot is fighting
     """
     motor_pair.set_default_speed(speed)
@@ -81,4 +77,4 @@ def fight(speed, tape_intensity):
             motor_pair.set_default_speed(speed * 3)
 
 
-fight(10, 19)
+fight(10)
