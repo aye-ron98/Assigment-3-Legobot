@@ -22,7 +22,7 @@ def steer(light, tape, steer_range, light_range):
     :precondition steer_range: must be an integer
     :precondition light_range: must be an integer
     :postcondition: will calculate a steer value as an integer and return it
-    :return: a steer value to preform robot steering as an integer
+    :return: a steer value to perform robot steering as an integer
     """
     return int(-95 + ((light - tape) * steer_range) / light_range)
 
