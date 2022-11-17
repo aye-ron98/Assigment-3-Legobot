@@ -19,7 +19,7 @@ def turn_randomly():
 
     :precondition: hub motion sensor is functional
     :precondition: a pair of motors to drive wheels are connected to hub
-    :postcondition: the robot is facing a direction that is a random angle in the range [150,180]
+    :postcondition: the robot is facing a direction that is a clockwise random angle in the range [150,180]
                     from its original direction
     """
     hub.motion_sensor.reset_yaw_angle()
