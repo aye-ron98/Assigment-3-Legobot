@@ -12,7 +12,8 @@ def steer(light, tape, steer_range, light_range):
     """
     Normalize light values between light_range to values in steer_range.
 
-    Ensure robot does not have heavy preference to right turns
+    Ensures robot does not have heavy preference to right turns.
+
     :param light: an integer that is the current amount of reflection from light sensor
     :param tape: an integer that is the amount of reflection from middle of black tape
     :param steer_range: an integer
