@@ -12,7 +12,7 @@ def scale(light, tape, steer_range, light_range):
     """
     Normalize light values between steer range to ensure robot does not have preference to right turns.
 
-    :param light: an integer that is the amount from light sensor
+    :param light: an integer that is the current amount of reflection from light sensor
     :param tape: an integer that is the amount of reflection from middle of black tape
     :param steer_range: an integer
     :param light_range: an integer
@@ -33,10 +33,12 @@ def drive(tape, floor, steer_max):
     :param tape: an integer that is the reflection from middle of line (lower bound)
     :param floor: an integer that is the reflection from floor (upper bound)
     :param steer_max: an integer that is the max steer value
-    :precondition: tape is an integer in the range [0,100]
-    :precondition: floor is an integer in the range [0,100] and must be greater than tape parameter
-    :precondition: steer_max is an integer in the range [0,100]
+    :precondition: tape must be an integer in the range [0,100]
+    :precondition: floor must be an integer in the range [0,100] and must be greater than tape parameter
+    :precondition: steer_max must be an integer in the range [0,100]
+    :precondition: a pair of motors to drive wheels are connected to hub
     :postcondition: robot will follow the black line
+    :postcondition: lines detailing current light intensity and steer values are printed to the screen
     """
     steer_range = steer_max - (-95)
     light_range = floor - tape

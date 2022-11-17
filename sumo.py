@@ -1,5 +1,4 @@
 from mindstorms import MSHub, Motor, MotorPair, ColorSensor, DistanceSensor, App
-
 import random
 
 # Initialize the hub.
@@ -16,9 +15,12 @@ weapon = Motor('E')
 
 def turn_randomly():
     """
-    Turns the robot in a random angle selected from the range of integers [110,180]
+    Turns the robot clockwise in a random angle selected from the range of integers [150,180].
 
-    :postcondition: the robot is facing a direction that is a random angle from its original direction
+    :precondition: hub motion sensor is functional
+    :precondition: a pair of motors to drive wheels are connected to hub
+    :postcondition: the robot is facing a direction that is a random angle in the range [150,180]
+                    from its original direction
     """
     hub.motion_sensor.reset_yaw_angle()
     current_angle = hub.motion_sensor.get_yaw_angle()
@@ -31,21 +33,19 @@ def turn_randomly():
 
 def run_weapon():
     """
-    Controls the weapon connected to a motor at a port.
+    Swings the weapon connected to the motor at a port if not standing on black boundary.
 
-    :postcondition: weapon connected to motor at the port is moving
+    :precondition: a motor with weapon attached is connected to hub
+    :postcondition: if not on black line then weapon connected to motor swings
+    :postcondition: if on black line then stop the robot and reset weapon position
     """
-    count = 1
-    while count < 2:
-        color = color_sensor.get_color()
-        if color == 'black' or color is None:
-            motor_pair.stop()
-            weapon.run_to_position(300, 'clockwise', 75)
-            break
-        else:
-            weapon.run_to_position(176, 'counterclockwise', 75)
-            weapon.run_to_position(300, 'clockwise', 75)
-        count += 1
+    color = color_sensor.get_color()
+    if color == 'black' or color is None:
+        motor_pair.stop()
+        weapon.run_to_position(300, 'clockwise', 75)
+    else:
+        weapon.run_to_position(176, 'counterclockwise', 75)
+        weapon.run_to_position(300, 'clockwise', 75)
 
 
 def fight(speed):
@@ -53,8 +53,10 @@ def fight(speed):
     Robot engages in offensive sumo maneuvers.
 
     :param speed: an integer
-    :precondition: speed must be an integer in the range [0, 100]
-    :postcondition: the robot is fighting
+    :precondition: speed must be an integer in the range [1, 100]
+    :precondition: a distance sensor is connected to hub
+    :precondition: a pair of motors to drive wheels are connected to hub
+    :postcondition: the robot is moving forward and fighting and staying within black boundaries by turning
     """
     motor_pair.set_default_speed(speed)
 
@@ -62,13 +64,11 @@ def fight(speed):
         motor_pair.start(0)
         dist_cm = distance_sensor.get_distance_cm()
         color = color_sensor.get_color()
-        print(color)
         if color == 'black' or color is None:
             motor_pair.stop()
             turn_randomly()
         if dist_cm is None:
             motor_pair.set_default_speed(speed)
-            continue
         elif dist_cm >= 20:
             motor_pair.set_default_speed(speed * 2)
         elif dist_cm < 5:
