@@ -36,6 +36,7 @@ def run_weapon():
     Swings the weapon connected to the motor at a port if not standing on black boundary.
 
     :precondition: a motor with weapon attached is connected to hub
+    :precondition: a color sensor is connected to hub
     :postcondition: if not on black line then weapon connected to motor swings
     :postcondition: if on black line then stop the robot and reset weapon position
     """
@@ -54,6 +55,7 @@ def fight(speed):
 
     :param speed: an integer
     :precondition: speed must be an integer in the range [1, 100]
+    :precondition: a color sensor is connected to hub
     :precondition: a distance sensor is connected to hub
     :precondition: a pair of motors to drive wheels are connected to hub
     :postcondition: the robot is moving forward and fighting and staying within black boundaries by turning

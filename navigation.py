@@ -38,6 +38,7 @@ def drive(tape, floor, steer_max):
     :precondition tape: must be an integer in the range [0,100]
     :precondition floor: must be an integer in the range [0,100] and must be greater than tape parameter
     :precondition steer_max: must be an integer in the range [0,100]
+    :precondition: a color sensor is connected to the hub
     :precondition: a pair of motors to drive wheels are connected to hub
     :postcondition: robot will follow the black line
     :postcondition: lines detailing current light intensity and steer values are printed to the screen
