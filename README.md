@@ -31,19 +31,16 @@ Content of the project folder:
 
 ```
  Top level of project folder: 
-├── .gitignore               # Git ignore file
-├── index.html               # landing HTML file, this is what users see when you come to url
-└── README.md
-
-It has the following subfolders and files:
-├── .git                     # Folder for git repo
-├── images                   # Folder for images
-    /blah.jpg                # 
-├── scripts                  # Folder for scripts
-    /blah.js                 # 
-├── styles                   # Folder for styles
-    /blah.css                # 
+├── .idea               # Git ignore file
+├── __pycache__               # landing HTML file, this is what users see when you come to url
+├── .DS_Store
+├── IMG_0399.JPG
+├── IMG_0400.JPEG
+├── IMG_0401.JPEG
+├── IMG_0402.JPEG
+├── README.md
+├── navigation.py
+├── normalization formila.xlsx
+└── sumo.py
 
 ```
-46
-​
