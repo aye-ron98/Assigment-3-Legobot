@@ -31,8 +31,8 @@ Content of the project folder:
 
 ```
  Top level of project folder: 
-├── .idea               # Git ignore file
-├── __pycache__               # landing HTML file, this is what users see when you come to url
+├── .idea              
+├── __pycache__               
 ├── .DS_Store
 ├── IMG_0399.JPG
 ├── IMG_0400.JPEG
